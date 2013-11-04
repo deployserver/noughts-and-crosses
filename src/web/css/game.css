@@ -1,0 +1,139 @@
+
+* {
+   box-sizing: border-box;
+   -moz-box-sizing: border-box;
+}
+
+html {
+   font: 10pt/1.5 "Lucida Sans Unicode", "Lucida Grande", "Helvetica", "Arial", sans-serif;
+}
+
+body.loading:before {
+   content: "";
+   background: rgba(0,0,0,0.1);
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+}
+
+body.loading:after {
+   content: ":: LOADING :: ";
+   box-shadow: 0 0 0.25rem 0.5rem rgba(0,0,0,0.5);
+   background: #ffffff;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   width: 10rem;
+   margin-left: -5rem;
+   text-align: center;
+   padding: 1rem 0;
+}
+
+ul {
+   list-style-type: none;
+   padding: 0;
+}
+
+.game-board {
+   overflow: hidden;
+}
+
+.game-board li {
+   float: left;
+   display: block;
+   border: 1px solid black;
+   height: 3rem;
+   width: 3rem;
+
+   transition: background 300ms ease;
+}
+.game-board li:nth-child(3n+1) {
+   clear: both;
+   border-left: none;
+}
+.game-board li:nth-child(3n+3) {
+   border-right: none;
+}
+.game-board li:nth-child(-n+3) {
+   border-top: none;
+}
+.game-board li:nth-child(n+7) {
+   border-bottom: none;
+}
+
+.game-board li:not(.cell-used):hover {
+   cursor: pointer;
+   background: rgba(0,0,0,0.1);
+   box-shadow: 0 0 0.5rem #fff inset;
+}
+.game-board li.cell-used {
+   position: relative;
+}
+.game-board li.cell-used:after {
+   color: #ffffff;
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   line-height: 3rem;
+   text-align: center;
+   font-size: 2rem;
+}
+.game-board li.cell-used-by-0 {
+   background: red;
+}
+.game-board li.cell-used-by-0:after {
+   content: "O";
+}
+.game-board li.cell-used-by-1 {
+   background: #4acaff;
+}
+.game-board li.cell-used-by-1:after {
+   content: "X";
+}
+
+.setup {
+   border: none;
+}
+.setup input[type=text] {
+   border: none;
+   outline: none;
+   box-shadow: 0 0 3px rgba(0,0,0,0.5) inset;
+   padding: 0.5rem;
+   transition: all 300ms ease;
+}
+.setup input[type=text]:focus {
+   background-color: #eee;
+   box-shadow: 0 0 3px rgba(58, 209, 49, 0.5) inset;
+}
+.setup input[type=range] {
+   position: relative;
+   width: 5rem;
+}
+.setup input[type=range]:after {
+   content: attr(data-value);
+   position: absolute;
+   left: 100%;
+   margin-left: 0.5rem;
+}
+.setup button {
+   border: none;
+   outline: none;
+   box-shadow: 0 0 3px rgba(0,0,0,0.5) inset;
+   background: rgb(58, 209, 49);
+   transition: all 300ms ease;
+   padding: 0.5rem 1rem;
+   font-weight: bold;
+   color: #fff;
+   text-transform: uppercase;
+}
+.setup button:focus,
+.setup button:hover {
+   background: rgb(52, 173, 44);
+}
+.setup button:active {
+   background: orange;
+}

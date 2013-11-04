@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+   <head>
+      <link rel="stylesheet" href="css/game.css">
+   </head>
+
+   <body class="loading">
+      <fieldset class="setup">
+         <div><label>Player One: <input type="text" placeholder="me"></label></div>
+         <div><label>Player Two: <input type="text" placeholder="computer"></label></div>
+         <div><label>Board Size: <input type="range" min="3" max="10" step="1" value="3"></label></div>
+         <div><button>Play!</button></div>
+      </fieldset>
+      <div id="board"></div>
+
+      <script src="js/ext/require.js"></script>
+      <script>
+         require.config({
+            baseUrl: 'js',
+            paths: {
+               jquery: 'ext/jquery-2.0.3',
+               subscribable: 'https://raw.github.com/steveukx/Subscribable/v2/src/subscribable'
+            }
+         });
+
+         require(['jquery', 'game', 'board', 'grid', 'user'],
+               function(jQuery, Game, Board, Grid, User) {
+                  jQuery(document.body)
+                        .removeClass('loading')
+                        .on('change', 'input[type="range"]', function(e) {
+                           e.target.setAttribute('data-value', e.target.value);
+                        });
+
+                  jQuery('input[type="range"]').change();
+
+                  jQuery('.setup button').click(function() {
+                     var board = jQuery('#board').remove().empty().insertAfter('.setup');
+                     var players = jQuery('.setup input');
+
+                     new Game(new Board(board), new Grid(jQuery('.setup input[type=range]').val()), [
+                           new User(players.eq(0).val() || 'Me', 0),
+                           new User(players.eq(1).val() || 'Computer', 1)
+                     ]);
+                  });
+               });
+      </script>
+   </body>
+</html>
