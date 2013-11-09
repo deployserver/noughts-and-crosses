@@ -5,6 +5,10 @@ define(function () {
       this.y = y;
    }
 
+   CellSelectionEvent.prototype.toString = CellSelectionEvent.toString = function () {
+      return "CellSelectionEvent";
+   };
+
    CellSelectionEvent.create = function (x, y) {
       return new CellSelectionEvent(x, y);
    };

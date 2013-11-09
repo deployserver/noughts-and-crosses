@@ -1,4 +1,4 @@
-define(function() {
+define(['subscribable', 'events/GameOverEvent'], function(subscribable, GameOverEvent) {
 
    /**
     *
@@ -7,8 +7,10 @@ define(function() {
     */
    function Grid(size) {
       this._size = size;
-      this._cells = new Array(size * size);
+      this._cells = String(new Array(size * size)).split(",").map(function () {});
    }
+
+   (Grid.prototype = Object.create(subscribable.prototype)).constructor = Grid;
 
    /**
     * @type {Number} The number of cells per row / column
@@ -42,7 +44,10 @@ define(function() {
       if(!this.getAt(row, col)) {
          this._cells[this._indexOf(row, col)] = user;
          if(this.winningPath(row, col)) {
-            this.fire('game.over', user);
+            this.fire(new GameOverEvent(user));
+         }
+         else if(this.isBoardComplete()) {
+            this.fire(new GameOverEvent);
          }
       }
       return this;
@@ -73,16 +78,26 @@ define(function() {
     *
     * @param {Number} row
     * @param {Number} col
-    * @returns {User}
+    * @returns {?User}
     */
    Grid.prototype.winningPath = function(row, col) {
       var paths = this._getPaths(row, col);
       for(var path in paths) {
-         if(paths.hasOwnProperty(path) && paths[path].all(Grid._uniqueUserValidation)) {
+         if(paths.hasOwnProperty(path) && paths[path].every(Grid._uniqueUserValidation)) {
             return paths[path][0];
          }
       }
-      return false;
+      return null;
+   };
+
+   /**
+    * Gets whether there are any empty spaces left
+    * @returns {boolean}
+    */
+   Grid.prototype.isBoardComplete = function() {
+      return this._cells.every(function(user) {
+         return !!user;
+      });
    };
 
    /**
